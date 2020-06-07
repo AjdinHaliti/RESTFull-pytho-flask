@@ -1,5 +1,5 @@
 from werkzeug.security import safe_str_cmp
-from user import User
+from resources.user import UserModel
 
 #para se mos kriju db kt e kam prdorur
 # users = [
@@ -12,15 +12,15 @@ from user import User
 # useremail_table = {u.email: u for u in users }
 
 def authenticate(username, password):
-    user = User.find_by_username(username)
+    user = UserModel.find_by_username(username)
     if user and safe_str_cmp(user.password, password):
         return user
 
 #kjo osht unique pr flask jwt, kjo mer si parametr payload, payload osht ajo vlera mbrenda jwt tokenit
 def identity(payload): #payload vajn pi ne request
     user_id = payload['identity'] # ne identity ruhet id
-    return User.find_by_id(user_id)
+    return UserModel.find_by_id(user_id)
 
 def retrievUserByemail(email):
-    user_email = User.useremail_table.get(email, None)
-    return User.find_by_email(user_email)
+    user_email = UserModel.useremail_table.get(email, None)
+    return UserModel.find_by_email(user_email)
